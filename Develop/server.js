@@ -1,10 +1,9 @@
 // Dependencies
-// =============================================================
+
 var express = require("express");
 var path = require("path");
 
 // Sets up the Express App
-// =============================================================
 var app = express();
 var PORT = 3000;
 
@@ -12,53 +11,27 @@ var PORT = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//Reservation array
-
-//Tables array
-var tablesArray = [];
-
-//Waitlist array
-var waitlistArray = [];
-
 // Routes
 app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "./public/index.html"));
+  res.sendFile(path.join(__dirname, "notes.html"));
 });
 
-app.get("/tables", function(req, res) {
-  res.sendFile(path.join(__dirname, "./public/tables.html"));
+app.get("*", function(req, res) {
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/reservations", function(req, res) {
-  res.sendFile(path.join(__dirname, "./public/reservations.html"));
+// Read the db.json file and return all saved notes as JSON.
+app.get("/api/notes", function(req, res) {
+  return res.json();
 });
 
-// Displays all tables and reservations
-app.get("/api/tables", function(req, res) {
-  return res.json(tablesArray);
+//Post the stuff
+app.post("/api/notes", function(req, res) {
+  var notes = req.body;
 });
-
-app.get("/api/waitlist", function(req, res) {
-  return res.json(waitlistArray);
-});
-
-// Create New Reservations - takes in JSON input
-app.post("/api/reserve", function(req, res) {
-  // req.body hosts is equal to the JSON post sent from the user
-  // This works because of our body parsing middleware
-  var newReservation = req.body;
-
-  // Using a RegEx Pattern to remove spaces from newCharacter
-  // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-
-  console.log(newReservation);
-  if (tablesArray.length < 5) {
-    tablesArray.push(newReservation);
-  } else {
-    waitlistArray.push(newReservation);
-  }
-
-  res.json(newReservation);
+//Delete the stuff
+app.delete("/", function(req, res) {
+  res.send("DELETE request to homepage");
 });
 
 // Starts the server to begin listening
