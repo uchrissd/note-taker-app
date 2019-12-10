@@ -4,6 +4,17 @@ var express = require("express");
 var path = require("path");
 const fs = require("fs");
 
+//Generate random id
+
+var ID = function() {
+  return (
+    "_" +
+    Math.random()
+      .toString(36)
+      .substr(2, 9)
+  );
+};
+
 // Sets up the Express App
 var app = express();
 var PORT = 3000;
@@ -24,7 +35,14 @@ app.get("/notes", function(req, res) {
 
 // Read the db.json file and return all saved notes as JSON.
 app.get("/api/notes", function(req, res) {
-  return res.json();
+  fs.readFile("./db/db.json", "utf8", function noteCallBack(err, d) {
+    return res.json(JSON.parse(d));
+  });
+});
+
+//Delete the selected note
+app.delete("/api/notes/:id", function deleteNote(req, res) {
+  fs.readFile("./db/db.json", "utf8", function getNoteId(err, d) {});
 });
 
 //Post the stuff
@@ -33,22 +51,19 @@ app.post("/api/notes", function(req, res) {
   let noteText = { title: "Test Title", text: "Test text" };
   noteText.title = notes.title;
   noteText.text = notes.text;
+  noteText.id = ID();
 
   fs.readFile("./db/db.json", "utf8", function noteCallBack(err, d) {
     if (err) throw err;
     console.log("this is the console log", d);
     noteObject = JSON.parse(d);
-    noteObject.data.push(noteText);
+    noteObject.push(noteText);
     noteJSON = JSON.stringify(noteObject);
 
     fs.writeFile("./db/db.json", noteJSON, "utf8", err => {
       if (err) throw err;
     });
   });
-});
-//Delete the stuff
-app.delete("/", function(req, res) {
-  res.send("DELETE request to homepage");
 });
 
 // Starts the server to begin listening
