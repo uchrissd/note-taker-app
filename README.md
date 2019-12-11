@@ -13,7 +13,7 @@ The application is written in JavaScript and use Express.js to run the server si
 
 **Screenshots**
 
-![Dashboard Screenshot](/public/assets/images/app-screenshot.jpg)
+![Dashboard Screenshot](Develop\public\assets\images\app-screenshot.jpg)
 
 **Code Example**
 
