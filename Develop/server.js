@@ -4,7 +4,7 @@ var express = require("express");
 var path = require("path");
 const fs = require("fs");
 
-//Generate random id
+//Generate random id for each note
 
 var ID = function() {
   return (
@@ -17,7 +17,7 @@ var ID = function() {
 
 // Sets up the Express App
 var app = express();
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -33,14 +33,14 @@ app.get("/notes", function(req, res) {
   res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
-// Read the db.json file and return all saved notes as JSON.
+// Api reads the jb json file to return the notes in the form of an array
 app.get("/api/notes", function(req, res) {
   fs.readFile("./db/db.json", "utf8", function noteCallBack(err, d) {
     return res.json(JSON.parse(d));
   });
 });
 
-//Delete the selected note
+//Delete api target an object by the object's id in the db json file after a user deletes a note.
 app.delete("/api/notes/:id", function deleteNote(req, res) {
   var noteId = req.body.id;
 
@@ -61,7 +61,7 @@ app.delete("/api/notes/:id", function deleteNote(req, res) {
   });
 });
 
-//Post the stuff
+//Api that passes the note information to the front end functions for rendering the notes onto the HTML page
 app.post("/api/notes", function(req, res) {
   var notes = req.body;
   let noteText = { title: "Test Title", text: "Test text" };
@@ -83,7 +83,6 @@ app.post("/api/notes", function(req, res) {
 });
 
 // Starts the server to begin listening
-// =============================================================
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
