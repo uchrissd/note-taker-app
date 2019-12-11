@@ -42,7 +42,23 @@ app.get("/api/notes", function(req, res) {
 
 //Delete the selected note
 app.delete("/api/notes/:id", function deleteNote(req, res) {
-  fs.readFile("./db/db.json", "utf8", function getNoteId(err, d) {});
+  var noteId = req.body.id;
+
+  fs.readFile("./db/db.json", "utf8", function getNoteId(err, d) {
+    console.log("this is the array", d);
+    noteArray = JSON.parse(d);
+
+    for (var i = 0; i < noteArray.length; i++) {
+      console.log(noteArray[i]);
+      if (noteArray[i].id === noteId) {
+        noteArray.splice(i, 1);
+
+        fs.writeFile("./db/db.json", JSON.stringify(noteArray), "utf8", err => {
+          if (err) throw err;
+        });
+      }
+    }
+  });
 });
 
 //Post the stuff
