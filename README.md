@@ -42,4 +42,4 @@ app.delete("/api/notes/:id", function deleteNote(req, res) {
 
 **Installation**
 
-No installation necessary. Project is hosted here: https://github.com/uchrissd/note-taker-app
+No installation necessary. Project is hosted here: https://note-taker-web-application.herokuapp.com/notes
